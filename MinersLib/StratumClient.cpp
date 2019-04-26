@@ -204,11 +204,6 @@ void StratumClient::Connect()
     }
 }
 
-void DevReminder()
-{
-    printf("\n\nDeveloper message :\nPlease consider a donation to Pascal account 529692-23 so we can continue the support and optimization of this miner.\nThank you.\n\n");
-}
-
 void StratumClient::Reconnect(U32 preSleepTimeMS)
 {
     Guard l(m_reconnMutex);
@@ -223,12 +218,6 @@ void StratumClient::Reconnect(U32 preSleepTimeMS)
 	m_authorized = false;
 	m_connected = false;
     m_workID = 0;
-
-    if (GlobalMiningPreset::I().m_devfeePercent == 0.0f)
-    {
-        DevReminder();
-        CpuSleep(2000);
-    }
 
     //dont wait to much in devfee mode
     if (GlobalMiningPreset::I().IsInDevFeeMode())
@@ -488,8 +477,6 @@ void StratumClient::Preconnect()
     {
         if (!m_soloMining)
             PrintOut("User: '%s' PW: '%s'\n", m_active->user.c_str(), m_active->pass.c_str());
-        else
-            PrintDonationMsg();
     }
 
     if (IsSoloMining())
@@ -862,17 +849,6 @@ void StratumClient::RespondMiningSubmit(Json::Value& responseObject, U64 gpuInde
     }
 }
 
-void StratumClient::PrintDonationMsg()
-{
-    if (GlobalMiningPreset::I().m_devfeePercent > 0.0f)
-        PrintOut("Dev donation set to %s%%\n", TrimZeros(FormatString("%.2f", GlobalMiningPreset::I().m_devfeePercent), true, true).c_str());
-    else
-    {
-        PrintOut("Dev donation is off.\n");
-        DevReminder();
-    }
-}
-
 void StratumClient::RespondAuthorize(Json::Value& responseObject, U64 gpuIndex)
 {
     Json::Value res = responseObject.get("result", Json::Value::null);
@@ -924,8 +900,6 @@ void StratumClient::RespondAuthorize(Json::Value& responseObject, U64 gpuIndex)
                 PrintOut("%s is autorized on stratum server %s\n", m_active->user.c_str(), m_active->HostDescr());
             else
                 PrintOut("Autorized on stratum server %s\n", m_active->HostDescr());
-             
-            PrintDonationMsg();
         }
     } 
 }

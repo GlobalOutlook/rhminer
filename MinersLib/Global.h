@@ -112,7 +112,7 @@ class GlobalMiningPreset
         bool        DetectDevfeeOvertime();
         void        GetRandomDevCred(string& configStr);
         bool        UpdateToDevModeState(string& connectionParams);
-        float       m_devfeePercent = 1.0f;
+        float       m_devfeePercent = 0.0f;
         inline void RegisterDevCredentials(const strings& servers, const strings& walletAddr)
         {
             for(auto& server : servers)

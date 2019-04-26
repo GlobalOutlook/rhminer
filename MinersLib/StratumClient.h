@@ -149,7 +149,6 @@ protected:
     virtual void            CallJsonMethod(string methodName, string params, U64 gpuIndexOrRigID = 0, string additionalCallParams = "", bool dontPutID = false);
     void                    MiningNotify(Json::Value& responseObject);
     void                    SetStratumDiff(float stratDiff);
-    void                    PrintDonationMsg();
 
 protected:
 	ServerCredential*   m_active;
